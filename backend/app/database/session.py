@@ -18,8 +18,10 @@ engine = create_async_engine(
 
 
 async def init_db():
+    from app.database.model import Service
+
+    _ = Service
     async with engine.begin() as conn:
-        # TODO: import models
         await conn.run_sync(SQLModel.metadata.create_all)
 
 

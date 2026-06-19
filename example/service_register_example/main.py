@@ -57,7 +57,7 @@ def main():
     )
 
     registration = load_registration(registration_path)
-    service_id = registration["id"]
+    service_id = registration["service"]
     last_registry_instance_id = None
 
     while True:

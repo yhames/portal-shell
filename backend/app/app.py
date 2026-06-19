@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 import fastapi
 
 from app.database import init_db
+from app.router.registry_router import router as registry_router
 
 
 @asynccontextmanager
@@ -13,4 +14,5 @@ async def lifespan(app: fastapi.FastAPI):
 
 def create_app():
     app = fastapi.FastAPI(lifespan=lifespan)
+    app.include_router(registry_router)
     return app
