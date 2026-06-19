@@ -1,0 +1,22 @@
+services:
+  frontend:
+    image: frontend:latest
+    ports:
+      - "3001:3000"
+
+  backend:
+    image: backend:latest
+    ports:
+      - "8001:8000"
+
+  service-registrar:
+    image: service-registrar:latest
+    volumes:
+      - ./portal-registry.yml:/app/portal-registry.yml:ro
+    environment:
+      REGISTRY_URL: http://portal-shell-registry:8000
+      INTERVAL_SECONDS: 10
+    depends_on:
+      - frontend
+      - backend
+    restart: always
