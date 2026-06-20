@@ -60,7 +60,7 @@ class HealthCheckWorker:
 
         self._running = True
         # 클래스 내부에서 직접 태스크를 생성하고 관리
-        self._task = asyncio.create_task(self.run())
+        self._task = asyncio.create_task(self._run())
 
     async def stop(self) -> None:
         """외부에서 워커를 안전하게 종료하는 메서드 (비동기)"""
@@ -77,7 +77,7 @@ class HealthCheckWorker:
         finally:
             self._task = None
 
-    async def run(self) -> None:
+    async def _run(self) -> None:
         async with httpx2.AsyncClient(follow_redirects=False) as client:
             while True:
                 try:
