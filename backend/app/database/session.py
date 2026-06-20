@@ -18,9 +18,9 @@ engine = create_async_engine(
 
 
 async def init_db():
-    from app.database.model import Service
+    from app.database.model import ServiceRecord
 
-    _ = Service
+    _ = ServiceRecord
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
 

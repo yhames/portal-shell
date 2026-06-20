@@ -10,7 +10,7 @@ from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.app import create_app
-from app.router import registry_router, service_router
+from app.router import registry_router
 
 
 @pytest.fixture
@@ -29,7 +29,6 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Generator[TestCli
             yield session
 
     monkeypatch.setattr(registry_router, "get_async_session", test_session)
-    monkeypatch.setattr(service_router, "get_async_session", test_session)
     yield TestClient(create_app())
     asyncio.run(engine.dispose())
 

@@ -1,10 +1,12 @@
-from typing import Any
+from typing import Any, ClassVar
 
 from sqlalchemy import JSON, Column
 from sqlmodel import Field, SQLModel
 
 
-class Service(SQLModel, table=True):
+class ServiceRecord(SQLModel, table=True):
+    __tablename__: ClassVar[str] = "services"  # pyright: ignore[reportAssignmentType]
+
     id: int | None = Field(default=None, primary_key=True)
     service: str = Field(index=True, unique=True)
     name: str
