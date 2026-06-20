@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, ClassVar
 
 from sqlalchemy import JSON, Column, UniqueConstraint
@@ -24,3 +25,8 @@ class ServiceRecord(SQLModel, table=True):
     display_order: int = 10
     frontend: dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
     backend: dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
+    health_state: str = "unknown"
+    health_checked_at: datetime | None = None
+    last_healthy_at: datetime | None = None
+    consecutive_failures: int = 0
+    health_error: str | None = None

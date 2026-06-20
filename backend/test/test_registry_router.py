@@ -25,7 +25,19 @@ def test_register_service(
     response = client.post("/register", json=registration)
 
     assert response.status_code == 201
-    assert response.json() == {"id": 1, **registration}
+    assert response.json() == {
+        "id": 1,
+        **registration,
+        "status": {
+            "health": {
+                "state": "unknown",
+                "checkedAt": None,
+                "lastHealthyAt": None,
+                "consecutiveFailures": 0,
+                "error": None,
+            }
+        },
+    }
 
 
 def test_register_duplicate_service_returns_conflict(
@@ -66,6 +78,17 @@ def test_register_invalid_service_returns_unprocessable_content(
         "/register",
         json={"metadata": {"namespace": "robotics", "name": "invalid"}},
     )
+
+    assert response.status_code == 422
+
+
+def test_register_rejects_non_http_health_url(
+    client: TestClient, registration: dict[str, Any]
+) -> None:
+    invalid_registration = deepcopy(registration)
+    invalid_registration["spec"]["backend"]["healthUrl"] = "ftp://backend/health"
+
+    response = client.post("/register", json=invalid_registration)
 
     assert response.status_code == 422
 

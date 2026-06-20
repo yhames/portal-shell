@@ -25,6 +25,10 @@ async def init_db():
         await conn.run_sync(SQLModel.metadata.create_all)
 
 
+async def close_db() -> None:
+    await engine.dispose()
+
+
 async_session_maker = async_sessionmaker(
     engine,
     class_=AsyncSession,

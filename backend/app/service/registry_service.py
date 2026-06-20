@@ -3,7 +3,7 @@ from sqlmodel import col, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.database.model import ServiceRecord
-from app.dto import ServiceRegistration, ServiceUpdate
+from app.dto import HealthState, ServiceRegistration, ServiceUpdate
 from app.exception import ServiceAlreadyExistsError, ServiceNotFoundError
 
 
@@ -90,6 +90,11 @@ async def update_service_record(
             service.frontend = spec.frontend.model_dump(mode="json")
         if spec.backend is not None:
             service.backend = spec.backend.model_dump(mode="json", by_alias=True)
+            service.health_state = HealthState.UNKNOWN
+            service.health_checked_at = None
+            service.last_healthy_at = None
+            service.consecutive_failures = 0
+            service.health_error = None
         if spec.display is not None:
             if spec.display.name is not None:
                 service.display_name = spec.display.name

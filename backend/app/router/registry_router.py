@@ -9,10 +9,13 @@ from app.dto import (
     DisplayConfig,
     FrontendConfig,
     HealthResponse,
+    HealthState,
+    ServiceHealthStatus,
     ServiceMetadata,
     ServiceRegistration,
     ServiceResponse,
     ServiceSpec,
+    ServiceStatus,
     ServiceUpdate,
 )
 from app.exception import ServiceRecordNotPersistedError
@@ -48,6 +51,15 @@ def _to_service_response(service: ServiceRecord) -> ServiceResponse:
             ),
             frontend=FrontendConfig.model_validate(service.frontend),
             backend=BackendConfig.model_validate(service.backend),
+        ),
+        status=ServiceStatus(
+            health=ServiceHealthStatus(
+                state=HealthState(service.health_state),
+                checkedAt=service.health_checked_at,
+                lastHealthyAt=service.last_healthy_at,
+                consecutiveFailures=service.consecutive_failures,
+                error=service.health_error,
+            )
         ),
     )
 

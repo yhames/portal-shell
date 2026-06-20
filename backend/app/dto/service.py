@@ -1,4 +1,7 @@
-from pydantic import BaseModel, ConfigDict, Field
+from datetime import datetime
+from enum import StrEnum
+
+from pydantic import AnyHttpUrl, BaseModel, ConfigDict, Field
 
 
 class FrontendConfig(BaseModel):
@@ -9,7 +12,7 @@ class FrontendConfig(BaseModel):
 class BackendConfig(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    health_url: str = Field(alias="healthUrl")
+    health_url: AnyHttpUrl = Field(alias="healthUrl")
 
 
 class DisplayConfig(BaseModel):
@@ -36,8 +39,29 @@ class ServiceRegistration(BaseModel):
     spec: ServiceSpec
 
 
+class HealthState(StrEnum):
+    UNKNOWN = "unknown"
+    HEALTHY = "healthy"
+    UNHEALTHY = "unhealthy"
+
+
+class ServiceHealthStatus(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    state: HealthState
+    checked_at: datetime | None = Field(alias="checkedAt")
+    last_healthy_at: datetime | None = Field(alias="lastHealthyAt")
+    consecutive_failures: int = Field(alias="consecutiveFailures")
+    error: str | None
+
+
+class ServiceStatus(BaseModel):
+    health: ServiceHealthStatus
+
+
 class ServiceResponse(ServiceRegistration):
     id: int
+    status: ServiceStatus
 
 
 class DisplayUpdate(BaseModel):
