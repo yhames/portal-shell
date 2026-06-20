@@ -57,7 +57,8 @@ def main():
     )
 
     registration = load_registration(registration_path)
-    service_id = registration["service"]
+    metadata = registration["metadata"]
+    service_id = f'{metadata["namespace"]}/{metadata["name"]}'
     last_registry_instance_id = None
 
     while True:

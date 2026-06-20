@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class FrontendConfig(BaseModel):
@@ -7,32 +7,56 @@ class FrontendConfig(BaseModel):
 
 
 class BackendConfig(BaseModel):
-    url: str
-    health_url: str
+    model_config = ConfigDict(populate_by_name=True)
+
+    health_url: str = Field(alias="healthUrl")
 
 
-class ServiceRegistration(BaseModel):
-    service: str
+class DisplayConfig(BaseModel):
     name: str
-    description: str
-    version: str
     icon: str
     order: int = 10
+
+
+class ServiceMetadata(BaseModel):
+    namespace: str
+    name: str
+    version: str
+
+
+class ServiceSpec(BaseModel):
+    description: str
+    display: DisplayConfig
     frontend: FrontendConfig
     backend: BackendConfig
 
 
-class ServiceResponse(ServiceRegistration):
-    model_config = ConfigDict(from_attributes=True)
+class ServiceRegistration(BaseModel):
+    metadata: ServiceMetadata
+    spec: ServiceSpec
 
+
+class ServiceResponse(ServiceRegistration):
     id: int
 
 
-class ServiceUpdate(BaseModel):
+class DisplayUpdate(BaseModel):
     name: str | None = None
-    description: str | None = None
-    version: str | None = None
     icon: str | None = None
     order: int | None = None
+
+
+class ServiceMetadataUpdate(BaseModel):
+    version: str | None = None
+
+
+class ServiceSpecUpdate(BaseModel):
+    description: str | None = None
+    display: DisplayUpdate | None = None
     frontend: FrontendConfig | None = None
     backend: BackendConfig | None = None
+
+
+class ServiceUpdate(BaseModel):
+    metadata: ServiceMetadataUpdate | None = None
+    spec: ServiceSpecUpdate | None = None

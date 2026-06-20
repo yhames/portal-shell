@@ -2,6 +2,7 @@ import asyncio
 from collections.abc import AsyncIterator, Generator
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
@@ -34,20 +35,26 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Generator[TestCli
 
 
 @pytest.fixture
-def registration() -> dict[str, object]:
+def registration() -> dict[str, Any]:
     return {
-        "service": "mission-management",
-        "name": "Mission Management",
-        "description": "Manages missions",
-        "version": "1.0.0",
-        "icon": "file-lines",
-        "order": 10,
-        "frontend": {
-            "type": "iframe",
-            "url": "http://localhost:3001",
+        "metadata": {
+            "namespace": "robotics",
+            "name": "mission-management",
+            "version": "1.0.0",
         },
-        "backend": {
-            "url": "http://localhost:8001",
-            "health_url": "http://localhost:8001/health",
+        "spec": {
+            "description": "Manages missions",
+            "display": {
+                "name": "Mission Management",
+                "icon": "file-lines",
+                "order": 10,
+            },
+            "frontend": {
+                "type": "iframe",
+                "url": "http://localhost:3001",
+            },
+            "backend": {
+                "healthUrl": "http://localhost:8001/health",
+            },
         },
     }

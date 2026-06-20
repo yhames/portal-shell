@@ -1,34 +1,32 @@
-# 플랫폼 내에서 이 서비스를 식별하는 고유 ID (kebab-case 권장)
-service: mission-management
+metadata:
+  # 서비스 소유 팀 또는 조직을 구분하는 네임스페이스
+  namespace: robotics
+  # 네임스페이스 내에서 이 서비스를 식별하는 이름 (kebab-case 권장)
+  name: mission-management
+  # 등록된 서비스의 Semantic Version
+  version: 5.1.6
 
-# 포털 UI 메뉴 및 화면 상단에 표시될 서비스 명칭
-name: 미션 관리
+spec:
+  # 서비스의 역할과 목적에 대한 상세 설명
+  description: A service to manage missions for robots, including scheduling and monitoring.
 
-# 서비스의 역할과 목적에 대한 상세 설명
-description: A service to manage missions for robots, including scheduling and monitoring.
+  # 포털 UI 표시 설정
+  display:
+    # 포털 UI 메뉴 및 화면 상단에 표시될 서비스 명칭
+    name: 미션 관리
+    # 서비스 명칭 왼쪽에 표시될 아이콘 식별자
+    icon: file-lines
+    # 포털 UI에서 이 서비스가 노출될 정렬 순서
+    order: 10
 
-# Semantic Versioning 기준의 서비스 버전
-version: 5.1.6
+  # 프론트엔드 UI 통합 방식 및 주소 설정
+  frontend:
+    # 메인 포털에 UI를 임베드하는 방식 (ex. iframe, mfe 등)
+    type: iframe
+    # 프론트엔드 웹 애플리케이션이 구동 중인 실제 URL
+    url: http://localhost:3001
 
-# 메뉴 이름 왼쪽에 표시될 아이콘 식별자 (FontAwesome 아이콘 클래스명 또는 커스텀 아이콘 URL)
-icon: file-lines
-
-# 포털 내비게이션 메뉴에서 이 서비스가 노출될 정렬 순서
-# - 기본값은 10이며, 숫자가 작을수록 상단(앞쪽)에 배치됩니다.
-# - 만약 다른 서비스와 순서(order)가 겹칠 경우, 서비스 명칭(name)의 알파벳 순으로 정렬됩니다.
-# - 추후 메뉴 사이에 새로운 서비스를 쉽게 끼워 넣을 수 있도록 10 단위(10, 20, 30...)로 지정하는 것을 권장합니다.
-order: 10
-
-# 프론트엔드 UI 통합 방식 및 주소 설정
-frontend:
-  # 메인 포털에 UI를 임베드하는 방식 (ex. iframe, mfe 등)
-  type: iframe
-  # 프론트엔드 웹 애플리케이션이 구동 중인 실제 URL
-  url: http://localhost:3001
-
-# 백엔드 API 서버 연동 및 헬스체크 설정
-backend:
-  # 프론트엔드나 포털 게이트웨이가 바라볼 백엔드 API 서버의 기본 URL
-  url: http://localhost:8001
-  # 포털이 이 서비스의 활성화 상태를 감시(Liveness Probe)하기 위한 헬스체크 엔드포인트
-  health_url: http://localhost:8001/health
+  # 백엔드 API 서버 연동 및 헬스체크 설정
+  backend:
+    # 포털이 서비스 상태를 확인하기 위한 헬스체크 엔드포인트
+    healthUrl: http://localhost:8001/health
