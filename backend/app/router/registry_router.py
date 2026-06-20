@@ -5,12 +5,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 
 from app.database import get_async_session
-from app.database.model import (
-    HealthResponse,
-    Service,
-    ServiceRegistration,
-    ServiceResponse,
-)
+from app.database.model import Service
+from app.dto import HealthResponse, ServiceRegistration, ServiceResponse
 
 router = APIRouter()
 INSTANCE_ID = str(uuid4())
